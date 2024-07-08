@@ -19,4 +19,6 @@ export type TMovies = {
 }
 export type TMoviesDetails = {
    original_title: string,
+   backdrop_path: string,
+   overview: string
 }

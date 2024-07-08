@@ -2,9 +2,10 @@ import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet } from "react
 
 import { Text, View } from "@/components/Themed";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTopRatedMovies } from "@/api/getmovies";
+import { fetchTopRatedMovies } from "@/actions/getmovies";
 import { TMovies } from "@/lib/types";
 import { Link } from "expo-router";
+import ErrorMessage from "@/components/error-message";
 
 export default function TabOneScreen() {
   const { data, isLoading, error } = useQuery<TMovies[]>({
@@ -12,27 +13,13 @@ export default function TabOneScreen() {
     queryFn: fetchTopRatedMovies,
   });
 
-  // const [movies, setMovies] = useState<TMovies[]>([]);
-  // const [isLoading, setIsLoading] = useState(false);
-
-  // useEffect(() => {
-  //   const topRatedMovies = async () => {
-  //     setIsLoading(true);
-  //     const topRatedMovies = await fetchTopRatedMovies();
-  //     setMovies(topRatedMovies);
-  //     setIsLoading(false);
-  //   };
-  //   topRatedMovies();
-  // }, []);
-
   if (isLoading) {
     return <ActivityIndicator />;
   }
 
   if (error) {
-    return <Text>{error.message}</Text>;
+    return <ErrorMessage error={error} />;
   }
-
   return (
     <FlatList
       data={data}
@@ -44,7 +31,7 @@ export default function TabOneScreen() {
           <Pressable style={styles.container}>
             <Image
               source={{
-                uri: `https://image.tmdb.org/t/p/w500/${item.poster_path}`,
+                uri: `${process.env.EXPO_PUBLIC_THE_MOVIE_DB_IMAGES_URL}/${item.poster_path}`,
               }}
               style={styles.image}
             />
