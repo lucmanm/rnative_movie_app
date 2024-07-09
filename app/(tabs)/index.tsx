@@ -2,19 +2,21 @@ import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet } from "react
 
 import { Text, View } from "@/components/Themed";
 import { useQuery } from "@tanstack/react-query";
-import { fetchTopRatedMovies } from "@/actions/getmovies";
 import { TMovies } from "@/lib/types";
 import { Link } from "expo-router";
 import ErrorMessage from "@/components/error-message";
+import { getUpcomingMovies } from "@/actions/movie-list";
 
 export default function TabOneScreen() {
   const { data, isLoading, error } = useQuery<TMovies[]>({
-    queryKey: ["topRatedMovies"],
-    queryFn: fetchTopRatedMovies,
+    queryKey: ["getUpcomingMovies"],
+    queryFn: getUpcomingMovies,
   });
 
   if (isLoading) {
-    return <ActivityIndicator />;
+    return (
+      <ActivityIndicator style={{ flex: 1, justifyContent: "center", alignItems: "center" }} />
+    );
   }
 
   if (error) {
