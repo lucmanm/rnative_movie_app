@@ -6,11 +6,14 @@ import { TMovies } from "@/lib/types";
 import { Link } from "expo-router";
 import ErrorMessage from "@/components/error-message";
 import { getUpcomingMovies } from "@/actions/movie-list";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
 export default function TabOneScreen() {
-  const { data, isLoading, error } = useQuery<TMovies[]>({
+  const { data, isLoading, error, fetchNextPage } = useInfiniteQuery<TMovies[]>({
     queryKey: ["getUpcomingMovies"],
-    queryFn: getUpcomingMovies,
+    queryFn: ({ pageParam }) => getUpcomingMovies(pageParam),
+    initialPageParam: 1,
+    getNextPageParam: (lastPage, pages) => pages.length + 1,
   });
 
   if (isLoading) {
@@ -22,9 +25,13 @@ export default function TabOneScreen() {
   if (error) {
     return <ErrorMessage error={error} />;
   }
+  const movieList = data?.pages.flat();
   return (
     <FlatList
-      data={data}
+      onEndReached={() => {
+        fetchNextPage();
+      }}
+      data={movieList}
       numColumns={2}
       columnWrapperStyle={{ gap: 10 }}
       contentContainerStyle={{ gap: 10, padding: 10 }}
