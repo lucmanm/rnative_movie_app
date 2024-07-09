@@ -1,7 +1,6 @@
 import { ActivityIndicator, FlatList, Image, Pressable, StyleSheet } from "react-native";
 
-import { Text, View } from "@/components/Themed";
-import { useQuery } from "@tanstack/react-query";
+import { Text } from "@/components/Themed";
 import { TMovies } from "@/lib/types";
 import { Link } from "expo-router";
 import ErrorMessage from "@/components/error-message";
@@ -11,7 +10,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 export default function TabOneScreen() {
   const { data, isLoading, error, fetchNextPage } = useInfiniteQuery<TMovies[]>({
     queryKey: ["getUpcomingMovies"],
-    queryFn: ({ pageParam }) => getUpcomingMovies(pageParam),
+    queryFn:  getUpcomingMovies,
     initialPageParam: 1,
     getNextPageParam: (lastPage, pages) => pages.length + 1,
   });

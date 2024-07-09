@@ -1,8 +1,8 @@
 
 // get all the upcomming movies
-export const getUpcomingMovies = async (page: number = 1) => {
+export const getUpcomingMovies = async ({ pageParam }: any) => {
 
-  const url = `${process.env.EXPO_PUBLIC_THE_MOVIE_DB_API_URL}/3/movie/upcoming?language=en-US&page=${page}`
+  const url = `${process.env.EXPO_PUBLIC_THE_MOVIE_DB_API_URL}/3/movie/upcoming?language=en-US&page=${pageParam}`
   const options = {
     method: 'GET',
     headers: {
@@ -16,6 +16,7 @@ export const getUpcomingMovies = async (page: number = 1) => {
   if (!response.ok) {
     throw new Error("FAILED_FETCH_UPCOMING_MOVIES")
   }
+
   const data = await response.json()
   return data.results
 
